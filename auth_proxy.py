@@ -104,12 +104,20 @@ async def oauth_token(
     )
 
 
+def _mcp_path(path: str) -> str:
+    """Map semantic paths like /todoist-extended to /mcp."""
+    if path in ("todoist-extended", "mcp", ""):
+        return "mcp"
+    return path
+
+
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def proxy(path: str, request: Request):
     if not _check_auth(request):
         return Response(content='{"error":"Unauthorized"}', status_code=401)
 
-    url = f"{UPSTREAM}/{path}" if path else UPSTREAM
+    upstream_path = _mcp_path(path)
+    url = f"{UPSTREAM}/{upstream_path}" if upstream_path else UPSTREAM
     headers = dict(request.headers)
     headers.pop("host", None)
     body = await request.body()
