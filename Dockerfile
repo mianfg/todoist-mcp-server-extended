@@ -18,7 +18,7 @@ FROM python:3.11-alpine
 
 RUN apk add --no-cache nodejs npm
 
-RUN pip install --no-cache-dir mcp-streamablehttp-proxy uvicorn httpx fastapi
+RUN pip install --no-cache-dir mcp-streamablehttp-proxy uvicorn httpx fastapi python-multipart
 
 WORKDIR /app
 
