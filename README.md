@@ -101,6 +101,15 @@ Some simple suggestions on what to ask Claude. Note that sometimes you have to b
 * "Give me some suggestions for listed tasks I can do today as I'm going shopping in town."
 * "Break task X down in to smaller subtasks and add due dates, x, y, z."
 
+## Remote Deployment (Docker + Claude.ai)
+
+When adding this server as a **remote MCP** in Claude.ai (URL-based), the deployment includes auth. If Claude shows **OAuth Client ID** and **Client Secret** fields:
+
+- **Client ID:** Any value (e.g. `mcp`) — not checked
+- **Client Secret:** Your `MCP_ACCESS_TOKEN` — must match the value in your server `.env`
+
+The auth proxy accepts either Bearer token or Basic auth. See [.env.example](.env.example) for required env vars.
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit a Pull Request.

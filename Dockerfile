@@ -18,19 +18,19 @@ FROM python:3.11-alpine
 
 RUN apk add --no-cache nodejs npm
 
-RUN pip install --no-cache-dir mcp-streamablehttp-proxy
+RUN pip install --no-cache-dir mcp-streamablehttp-proxy uvicorn httpx fastapi
 
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/node_modules ./node_modules
-
-ENV MCP_BIND_HOST=0.0.0.0
-ENV MCP_PORT=3000
+COPY auth_proxy.py .
+COPY start.sh .
+RUN chmod +x start.sh
 
 EXPOSE 3000
 
-# Proxy wraps stdio server and exposes /mcp over HTTP
-# TODOIST_API_TOKEN must be set at runtime
-CMD ["mcp-streamablehttp-proxy", "--host", "0.0.0.0", "--port", "3000", "node", "dist/index.js"]
+# Auth proxy (3000) validates Bearer token, forwards to MCP proxy (3001)
+# TODOIST_API_TOKEN + MCP_ACCESS_TOKEN must be set at runtime
+CMD ["./start.sh"]
